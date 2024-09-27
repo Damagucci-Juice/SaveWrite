@@ -18,15 +18,20 @@ struct WritesFeature {
     @ObservableState
     struct State: Equatable {
         @Presents var addWrite: AddWriteFeature.State?
+        @Presents var alert: AlertState<Action.Alert>?
         var writes: IdentifiedArrayOf<Write> = []
     }
 
     enum Action {
         case plusButtonTapped
         case addWrite(PresentationAction<AddWriteFeature.Action>)
+        case alert(PresentationAction<Alert>)
         case toggleFavortie(Write)
         case deleteButtonTapped(Write)
         case canDeleteWrite(Write, Bool)
+        enum Alert: Equatable {
+            case informFavoriteStillHave(Write)
+        }
     }
 
     var body: some ReducerOf<Self> {
@@ -53,15 +58,19 @@ struct WritesFeature {
                 if canDelete {
                     state.writes.remove(write)
                 } else {
-                    // Alert 창
-                    print("Alert 창 띄워보시죠 ~ 나이수 ~")
+                    state.alert = AlertState(title: {
+                        TextState("\(write.content)라는 문장이 favorites 목록에 포함되어 있어서 지울 수 없습니다.")
+                    })
                 }
+                return .none
+            case .alert:
                 return .none
             }
         }
         .ifLet(\.$addWrite, action: \.addWrite) {
             AddWriteFeature()
         }
+        .ifLet(\.$alert, action: \.alert)
     }
 }
 
@@ -95,6 +104,7 @@ struct WritesView: View {
                     }
                 }
             }
+            .buttonStyle(BorderlessButtonStyle())   // 이거 덕분에 list의 Row가 전체 선택이 안된다.
             .navigationTitle("Writes")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -113,6 +123,7 @@ struct WritesView: View {
                     AddWriteView(store: addWriteStore)
                 }
             }
+            .alert($store.scope(state: \.alert, action: \.alert))
         }
     }
 }
