@@ -25,6 +25,8 @@ struct WritesFeature {
         case plusButtonTapped
         case addWrite(PresentationAction<AddWriteFeature.Action>)
         case toggleFavortie(Write)
+        case deleteButtonTapped(Write)
+        case canDeleteWrite(Write, Bool)
     }
 
     var body: some ReducerOf<Self> {
@@ -42,8 +44,18 @@ struct WritesFeature {
                 return .none
             case .addWrite:
                 return .none
-            case let .toggleFavortie(write):
-                print("\(write.content) did Tap")
+            case .toggleFavortie:
+                return .none
+
+            case .deleteButtonTapped:
+                return .none
+            case let .canDeleteWrite(write, canDelete):
+                if canDelete {
+                    state.writes.remove(write)
+                } else {
+                    // Alert 창
+                    print("Alert 창 띄워보시죠 ~ 나이수 ~")
+                }
                 return .none
             }
         }
@@ -64,6 +76,13 @@ struct WritesView: View {
         NavigationStack {
             List(store.writes) { write in
                 HStack {
+                    Button {
+                        store.send(.deleteButtonTapped(write))
+                    } label: {
+                        Image(systemName: "trash")
+                            .foregroundStyle(.red)
+                    }
+
                     Text(write.content)
 
                     Spacer()

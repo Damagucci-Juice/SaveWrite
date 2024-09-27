@@ -32,8 +32,14 @@ struct AppFeature {
         Reduce { state, action in
             switch action {
             case let .writesTab(writeAction):
-                if case let .toggleFavortie(write) = writeAction {
+                switch writeAction {
+                case let .toggleFavortie(write):
                     return .send(.favoritesTab(.favoriteTapped(write)))
+                case let .deleteButtonTapped(write):
+                    let canDelete = !state.favoritesTab.writes.contains(write)
+                    return .send(.writesTab(.canDeleteWrite(write, canDelete)))
+                default:
+                    break
                 }
                 return .none
             case .favoritesTab:
