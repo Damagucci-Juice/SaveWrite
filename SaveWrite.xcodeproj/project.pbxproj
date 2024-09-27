@@ -8,17 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		B21E7FAC2CA6784200107103 /* SaveWriteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21E7FAB2CA6784200107103 /* SaveWriteApp.swift */; };
-		B21E7FAE2CA6784200107103 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21E7FAD2CA6784200107103 /* ContentView.swift */; };
 		B21E7FB02CA6784400107103 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B21E7FAF2CA6784400107103 /* Assets.xcassets */; };
 		B21E7FB32CA6784400107103 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B21E7FB22CA6784400107103 /* Preview Assets.xcassets */; };
+		B21E7FBB2CA6787000107103 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = B21E7FBA2CA6787000107103 /* ComposableArchitecture */; };
+		B21E7FBD2CA6792C00107103 /* WritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21E7FBC2CA6792C00107103 /* WritesView.swift */; };
+		B21E7FBF2CA67DCD00107103 /* AddWriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21E7FBE2CA67DCD00107103 /* AddWriteView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B21E7FA82CA6784200107103 /* SaveWrite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SaveWrite.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B21E7FAB2CA6784200107103 /* SaveWriteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveWriteApp.swift; sourceTree = "<group>"; };
-		B21E7FAD2CA6784200107103 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B21E7FAF2CA6784400107103 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B21E7FB22CA6784400107103 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		B21E7FBC2CA6792C00107103 /* WritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritesView.swift; sourceTree = "<group>"; };
+		B21E7FBE2CA67DCD00107103 /* AddWriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWriteView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B21E7FBB2CA6787000107103 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,7 +56,8 @@
 			isa = PBXGroup;
 			children = (
 				B21E7FAB2CA6784200107103 /* SaveWriteApp.swift */,
-				B21E7FAD2CA6784200107103 /* ContentView.swift */,
+				B21E7FBC2CA6792C00107103 /* WritesView.swift */,
+				B21E7FBE2CA67DCD00107103 /* AddWriteView.swift */,
 				B21E7FAF2CA6784400107103 /* Assets.xcassets */,
 				B21E7FB12CA6784400107103 /* Preview Content */,
 			);
@@ -83,6 +88,9 @@
 			dependencies = (
 			);
 			name = SaveWrite;
+			packageProductDependencies = (
+				B21E7FBA2CA6787000107103 /* ComposableArchitecture */,
+			);
 			productName = SaveWrite;
 			productReference = B21E7FA82CA6784200107103 /* SaveWrite.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +119,9 @@
 				Base,
 			);
 			mainGroup = B21E7F9F2CA6784200107103;
+			packageReferences = (
+				B21E7FB92CA6787000107103 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			productRefGroup = B21E7FA92CA6784200107103 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -137,7 +148,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B21E7FAE2CA6784200107103 /* ContentView.swift in Sources */,
+				B21E7FBF2CA67DCD00107103 /* AddWriteView.swift in Sources */,
+				B21E7FBD2CA6792C00107103 /* WritesView.swift in Sources */,
 				B21E7FAC2CA6784200107103 /* SaveWriteApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,6 +356,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B21E7FB92CA6787000107103 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.15.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B21E7FBA2CA6787000107103 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B21E7FB92CA6787000107103 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B21E7FA02CA6784200107103 /* Project object */;
 }
