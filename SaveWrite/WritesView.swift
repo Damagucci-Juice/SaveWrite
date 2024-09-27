@@ -24,6 +24,7 @@ struct WritesFeature {
     enum Action {
         case plusButtonTapped
         case addWrite(PresentationAction<AddWriteFeature.Action>)
+        case toggleFavortie(Write)
     }
 
     var body: some ReducerOf<Self> {
@@ -41,6 +42,9 @@ struct WritesFeature {
                 return .none
             case .addWrite:
                 return .none
+            case let .toggleFavortie(write):
+                print("\(write.content) did Tap")
+                return .none
             }
         }
         .ifLet(\.$addWrite, action: \.addWrite) {
@@ -57,25 +61,38 @@ struct WritesView: View {
     }
 
     var body: some View {
-        List(store.writes) { write in
-            Text(write.content)
-        }
-        .navigationTitle("Writes")
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button {
-                    store.send(.plusButtonTapped)
-                } label: {
-                    Image(systemName: "plus")
-                        .resizable()
+        NavigationStack {
+            List(store.writes) { write in
+                HStack {
+                    Text(write.content)
+
+                    Spacer()
+
+                    Button {
+                        store.send(.toggleFavortie(write))
+                    } label: {
+                        Image(systemName: "star")
+                            .foregroundStyle(.yellow)
+                    }
                 }
             }
-        }
-        .sheet(
-            item: $store.scope(state: \.addWrite, action: \.addWrite)
-        ) { addWriteStore in
-            NavigationStack {
-                AddWriteView(store: addWriteStore)
+            .navigationTitle("Writes")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        store.send(.plusButtonTapped)
+                    } label: {
+                        Image(systemName: "plus")
+                            .resizable()
+                    }
+                }
+            }
+            .sheet(
+                item: $store.scope(state: \.addWrite, action: \.addWrite)
+            ) { addWriteStore in
+                NavigationStack {
+                    AddWriteView(store: addWriteStore)
+                }
             }
         }
     }
