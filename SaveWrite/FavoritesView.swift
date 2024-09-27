@@ -56,6 +56,18 @@ struct FavoritesView: View {
     }
 }
 
-//#Preview {
-//    FavoritesView()
-//}
+#Preview {
+    let store = Store(initialState: FavoritesFeature.State(
+        writes: [
+            Write(id: UUID(), content: "Hello World"),
+            Write(id: UUID(), content: "I'm hero"),
+            Write(id: UUID(), content: "Good Morning My Friends")
+        ]
+    )) {
+        FavoritesFeature()
+    }
+
+    return NavigationStack {
+        FavoritesView(store: store)
+    }
+}
