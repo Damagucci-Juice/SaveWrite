@@ -13,64 +13,71 @@ struct Write: Equatable, Identifiable {
     var content: String
 }
 
+extension WritesFeature {
+
+}
+
+
 @Reducer
 struct WritesFeature {
     @ObservableState
     struct State: Equatable {
-        @Presents var addWrite: AddWriteFeature.State?
-        @Presents var alert: AlertState<Action.Alert>?
         var writes: IdentifiedArrayOf<Write> = []
+        @Presents var destination: Destination.State?
     }
 
     enum Action {
         case plusButtonTapped
-        case addWrite(PresentationAction<AddWriteFeature.Action>)
-        case alert(PresentationAction<Alert>)
         case toggleFavortie(Write)
         case deleteButtonTapped(Write)
         case canDeleteWrite(Write, Bool)
-        enum Alert: Equatable {
-            case informFavoriteStillHave(Write)
-        }
+        case destination(PresentationAction<Destination.Action>)
+
+//        enum Alert: Equatable {
+//            case informFavoriteStillHave(Write)
+//        }
     }
+
+    @Reducer
+    enum Destination {
+        case addWrite(AddWriteFeature)
+//        case alert(AlertState<WritesFeature.Action.Alert>)
+    }
+
+//    enum Destination {
+//        case addContact(AddWriteFeature)
+//        case alert(AlertState<WritesFeature.Action.Alert>)
+//    }
 
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .plusButtonTapped:
-                state.addWrite = AddWriteFeature.State(
+                state.destination = .addWrite(AddWriteFeature.State(
                     write: Write(id: UUID(), content: "")
-                )
-                return .none
-            case let .addWrite(.presented(.delegate(.saveWrite(write)))):
-                guard let write = state.addWrite?.write
-                else { return .none }
-                state.writes.append(write)
-                return .none
-            case .addWrite:
+                ))
                 return .none
             case .toggleFavortie:
                 return .none
-
             case .deleteButtonTapped:
                 return .none
             case let .canDeleteWrite(write, canDelete):
                 if canDelete {
                     state.writes.remove(write)
                 } else {
-                    state.alert = AlertState(title: {
-                        TextState("\(write.content)라는 문장이 favorites 목록에 포함되어 있어서 지울 수 없습니다.")
-                    })
+//                    state.destination = .alert(AlertState(title: {
+//                        TextState("\(write.content)라는 문장이 favorites 목록에 포함되어 있어서 지울 수 없습니다.")
+//                    }))
                 }
                 return .none
-            case .alert:
+            case let .destination(.presented(.addWrite(.delegate(.saveWrite(write))))):
+                guard let write = state.addWrite?.write
+                else { return .none }
+                state.writes.append(write)
                 return .none
             }
         }
-        .ifLet(\.$addWrite, action: \.addWrite) {
-            AddWriteFeature()
-        }
-        .ifLet(\.$alert, action: \.alert)
+        .ifLet(\.$destination, action: \.destination)
     }
 }
 
@@ -117,13 +124,13 @@ struct WritesView: View {
                 }
             }
             .sheet(
-                item: $store.scope(state: \.addWrite, action: \.addWrite)
+                item: $store.scope(state: \.destination?.addWrite, action: \.destination.addWrite)
             ) { addWriteStore in
                 NavigationStack {
                     AddWriteView(store: addWriteStore)
                 }
             }
-            .alert($store.scope(state: \.alert, action: \.alert))
+            .alert($store.scope(state: \.destination?.alert, action: \.destination.alert))
         }
     }
 }
