@@ -32,22 +32,12 @@ struct WritesFeature {
         case deleteButtonTapped(Write)
         case canDeleteWrite(Write, Bool)
         case destination(PresentationAction<Destination.Action>)
-
-//        enum Alert: Equatable {
-//            case informFavoriteStillHave(Write)
-//        }
     }
 
     @Reducer
     enum Destination {
         case addWrite(AddWriteFeature)
-//        case alert(AlertState<WritesFeature.Action.Alert>)
     }
-
-//    enum Destination {
-//        case addContact(AddWriteFeature)
-//        case alert(AlertState<WritesFeature.Action.Alert>)
-//    }
 
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -64,10 +54,6 @@ struct WritesFeature {
             case let .canDeleteWrite(write, canDelete):
                 if canDelete {
                     state.writes.remove(write)
-                } else {
-//                    state.destination = .alert(AlertState(title: {
-//                        TextState("\(write.content)라는 문장이 favorites 목록에 포함되어 있어서 지울 수 없습니다.")
-//                    }))
                 }
                 return .none
             case let .destination(.presented(.addWrite(.delegate(.saveWrite(write))))):
